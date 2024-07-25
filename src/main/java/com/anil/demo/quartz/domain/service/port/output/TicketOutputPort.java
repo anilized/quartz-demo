@@ -8,4 +8,5 @@ import java.util.List;
 public interface TicketOutputPort {
     void createTickets(List<Ticket> tickets);
     void createTicket(Ticket ticket);
+    void updateStatus(Ticket ticket);
 }

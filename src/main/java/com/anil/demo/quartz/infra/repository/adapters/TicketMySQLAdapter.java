@@ -24,4 +24,9 @@ public class TicketMySQLAdapter implements TicketOutputPort {
     public void createTicket(Ticket ticket) {
         ticketRepository.save(entityMapper.toEntity(ticket));
     }
+
+    @Override
+    public void updateStatus(Ticket ticket) {
+        ticketRepository.updateById(ticket.getId(), ticket.getState().getDescription());
+    }
 }
