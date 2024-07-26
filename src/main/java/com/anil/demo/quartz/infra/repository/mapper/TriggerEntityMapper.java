@@ -11,6 +11,7 @@ import org.mapstruct.Mapper;
 public interface TriggerEntityMapper {
 
   Trigger toDomain(TriggerEntity entity);
+  TriggerEntity toEntity(Trigger trigger);
 
   default String jsonNodeToString(JsonNode jsonNode) {
     try {

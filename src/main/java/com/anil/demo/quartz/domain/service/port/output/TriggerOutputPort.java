@@ -6,4 +6,6 @@ import java.util.List;
 public interface TriggerOutputPort {
   List<Trigger> fetchTrigger();
   void updateTriggerStatus(Long id, String status);
+  void updateDependentTriggerStatus(String status, Long triggerId, String filterStatus);
+  void saveTrigger(Trigger trigger);
 }

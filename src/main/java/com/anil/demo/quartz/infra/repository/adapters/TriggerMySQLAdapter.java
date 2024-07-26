@@ -17,11 +17,21 @@ public class TriggerMySQLAdapter implements TriggerOutputPort {
   @Override
   public List<Trigger> fetchTrigger() {
     return triggerEntityMapper.toDomainObjectList(triggerRepository
-        .findByStatusAndHost("CREATED", "local1"));
+        .findByStatusAndHost("WAITING", "local1"));
   }
 
   @Override
   public void updateTriggerStatus(Long id, String status) {
     triggerRepository.updateStatusById(id, status);
+  }
+
+  @Override
+  public void updateDependentTriggerStatus(String status, Long triggerId, String filterStatus) {
+    triggerRepository.updateDependentTriggerStatus(status, triggerId, filterStatus);
+  }
+
+  @Override
+  public void saveTrigger(Trigger trigger) {
+    triggerRepository.save(triggerEntityMapper.toEntity(trigger));
   }
 }

@@ -6,12 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionListener;
+import org.springframework.batch.core.listener.JobExecutionListenerSupport;
 import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class TicketJobListener  implements JobExecutionListener {
+public class TicketJobListener implements JobExecutionListener {
 
     private final TriggerOutputPort triggerOutputPort;
 
@@ -25,18 +26,20 @@ public class TicketJobListener  implements JobExecutionListener {
     @Override
     public void afterJob(JobExecution jobExecution) {
         String exitStatus;
-        if (!jobExecution.getExitStatus().equals(ExitStatus.COMPLETED)) {
-            exitStatus = jobExecution.getExitStatus().getExitDescription();
+        if (!jobExecution.getExitStatus().getExitCode().equals(ExitStatus.COMPLETED.getExitCode())) {
+            exitStatus = jobExecution.getExitStatus().getExitCode();
+
         } else {
-            exitStatus = ExitStatus.COMPLETED.getExitDescription();
+            exitStatus = ExitStatus.COMPLETED.getExitCode();
+            triggerOutputPort.updateDependentTriggerStatus("WAITING", jobExecution.getJobParameters().getLong("triggerId"), "CREATED");
         }
 
         log.info("JOB {} COMPLETED WITH EXIT STATUS OF {}", jobExecution.getJobInstance().getJobName(), jobExecution.getExitStatus().getExitDescription());
 
-        triggerOutputPort.updateTriggerStatus(jobExecution.getJobParameters().getLong("triggerId"),
+        triggerOutputPort.updateTriggerStatus(jobExecution.getJobParameters().getLong("id"),
                 exitStatus);
 
-        log.info("TRIGGER WITH ID {} STATUS UPDATED", jobExecution.getJobParameters().getLong("triggerId"));
+        log.info("TRIGGER WITH ID {} STATUS UPDATED", jobExecution.getJobParameters().getLong("id"));
 
     }
 }

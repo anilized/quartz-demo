@@ -19,4 +19,9 @@ public interface TriggerRepository extends JpaRepository<TriggerEntity, Long> {
   @Query("update TriggerEntity t SET t.status = :status where t.id = :id")
   void updateStatusById(Long id, String status);
 
+  @Modifying
+  @Transactional
+  @Query("update TriggerEntity t SET t.status = :status where t.triggerId = :triggerId and t.status = :filterStatus")
+  void updateDependentTriggerStatus(String status, Long triggerId, String filterStatus);
+
 }
