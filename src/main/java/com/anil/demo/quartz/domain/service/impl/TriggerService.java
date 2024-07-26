@@ -47,7 +47,8 @@ public class TriggerService implements TriggerJobUseCase {
 
       try {
         JobExecution execution = jobLauncher.run(job, new JobParametersBuilder()
-            .addDate("launchDate", new Date())
+                .addDate("launchDate", new Date())
+                .addLong("triggerId", t.getId())
             .toJobParameters());
       } catch (JobExecutionAlreadyRunningException | JobParametersInvalidException |
                JobInstanceAlreadyCompleteException | JobRestartException e) {

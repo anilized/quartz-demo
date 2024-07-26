@@ -5,4 +5,5 @@ import java.util.List;
 
 public interface TriggerOutputPort {
   List<Trigger> fetchTrigger();
+  void updateTriggerStatus(Long id, String status);
 }

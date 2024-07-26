@@ -19,4 +19,9 @@ public class TriggerMySQLAdapter implements TriggerOutputPort {
     return triggerEntityMapper.toDomainObjectList(triggerRepository
         .findByStatusAndHost("CREATED", "local1"));
   }
+
+  @Override
+  public void updateTriggerStatus(Long id, String status) {
+    triggerRepository.updateStatusById(id, status);
+  }
 }
